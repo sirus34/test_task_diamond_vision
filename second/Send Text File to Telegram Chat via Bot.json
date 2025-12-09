@@ -1,0 +1,100 @@
+{
+  "name": "Send Text File to Telegram Chat via Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send-text-file",
+        "responseMode": "lastNode",
+        "options": {
+          "binaryPropertyName": "data",
+          "responsePropertyName": "chat_id",
+          "rawBody": true
+        }
+      },
+      "id": "4c87bd81-eb2f-4c4c-8836-3829354b288a",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        288
+      ],
+      "webhookId": "8b283214-4934-455e-8142-f63f788a23b9"
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "id": "c39f77d6-b0ea-4c2a-b23e-dae4ee499893",
+      "name": "Extract Text from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook Trigger').item.json.query.chat_id }}",
+        "text": "={{ $json.data }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "428e4256-04ea-44c9-afb8-972f36223492",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        288
+      ],
+      "webhookId": "cc369012-fe53-483e-a521-559f4a4d9c62",
+      "credentials": {
+        "telegramApi": {
+          "id": "HaGw7meElKiamL50",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract Text from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Text from File": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "09a02add-46f0-4e1a-803a-cb0f76bc4145",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6d4cd92c9acabba48469b2c223d56ae20c556e3d9179e440c76790aa3d2d6e3b"
+  },
+  "id": "kg7L56ISK1c5cnym",
+  "tags": []
+}
